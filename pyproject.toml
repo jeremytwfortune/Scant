@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "scant"
+version = "0.1.0"
+description = ""
+authors = ["Jeremy Fortune <jeremytwfortune@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+playwright = "^1.43.0"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+mypy = "^1.10.0"
+ipykernel = "^6.29.4"
+boto3 = "^1.34.95"
+types-boto3 = "^1.0.2"
+types-requests = "^2.31.0.20240406"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120

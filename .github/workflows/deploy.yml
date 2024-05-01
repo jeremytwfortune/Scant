@@ -1,0 +1,53 @@
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      POETRY_VIRTUALENVS_IN_PROJECT: true
+      POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY: true
+      POETRY_CACHE_DIR: "~/.poetry-cache"
+    steps:
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        with:
+          python-version: "3.12"
+      - uses: hashicorp/setup-terraform@v3
+      - name: Install Package Manager
+        run: curl -sSL https://install.python-poetry.org | python3 -
+      - name: Install Dependencies
+        run: |
+          poetry install --without dev
+          # AWS Lambda cryptography needs a special platform
+          poetry run pip install \
+            --platform manylinux2014_x86_64 \
+            --target=.venv/lib/python3.12/site-packages \
+            --python-version 3.12 \
+            --only-binary=:all: \
+            --upgrade \
+            cryptography==41.0.7
+      - name: Set Credentials
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-1"
+      - name: Zip
+        run: |
+          mkdir -p dist
+          mkdir -p publish
+          cp -r scant/ dist/
+          cp -r .venv/lib/python3.12/site-packages/* dist/
+          cp -r .venv/lib/site-packages/* dist/
+          find dist/ -type f -print0 | xargs -0 chmod 755
+          cd dist/
+          zip -q -r ~/dist.zip ./*
+      - name: Deploy
+        working-directory: infrastructure
+        run: |
+          terraform init -backend-config="bucket=${{ secrets.TF_BUCKET }}"
+          terraform apply -auto-approve -var "lambda_zip_file=~/dist.zip"

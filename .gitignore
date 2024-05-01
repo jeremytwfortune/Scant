@@ -1,0 +1,13 @@
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+node_modules
+dist
+pack
+.env
+**/.terraform
+publish
+**/.mypy_cache
+.venv
