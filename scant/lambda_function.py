@@ -9,7 +9,7 @@ from scant.watermark import Watermark, Watermarker
 
 def lambda_handler(event, context) -> Any:
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch()
+        browser = playwright.chromium.launch(headless=True, args=["--disable-gpu", "--single-process"])
         page = browser.new_page()
 
         scanner = Scanner(page)

@@ -52,3 +52,31 @@ resource "aws_iam_role_policy" "scanner" {
   role   = aws_iam_role.scanner.id
   policy = data.aws_iam_policy_document.scanner.json
 }
+
+data "aws_iam_policy_document" "scheduler_assume" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com", "scheduler.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "scheduler" {
+  name               = "scant-scheduler"
+  assume_role_policy = data.aws_iam_policy_document.scheduler_assume.json
+}
+
+data "aws_iam_policy_document" "scheduler" {
+  statement {
+    actions   = ["lambda:InvokeFunction"]
+    resources = [aws_lambda_function.scanner.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "scheduler" {
+  name   = "scheduler"
+  role   = aws_iam_role.scheduler.id
+  policy = data.aws_iam_policy_document.scheduler.json
+}

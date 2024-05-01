@@ -1,5 +1,5 @@
 resource "aws_ssm_parameter" "watermark" {
-  name  = "/watermark"
+  name  = "/scant/watermark"
   type  = "String"
   value = "{\"lastKnownID\": 0}"
 

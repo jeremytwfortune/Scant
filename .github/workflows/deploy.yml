@@ -19,34 +19,27 @@ jobs:
       - uses: hashicorp/setup-terraform@97f030cf6dc0b4f5e0da352c7bca9cca34579800 # v3.1.0
       - name: Install Package Manager
         run: curl -sSL https://install.python-poetry.org | python3 -
-      - name: Install Dependencies
-        run: |
-          poetry install --without dev
-          # AWS Lambda cryptography needs a special platform
-          poetry run pip install \
-            --platform manylinux2014_x86_64 \
-            --target=.venv/lib/python3.12/site-packages \
-            --python-version 3.12 \
-            --only-binary=:all: \
-            --upgrade \
-            cryptography==41.0.7
       - name: Set Credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-east-1"
-      - name: Zip
+      - uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2.0.1
+        with:
+          mask-password: true
+      - name: Build
+        id: build
+        shell: pwsh
         run: |
-          mkdir -p dist
-          mkdir -p publish
-          cp -r scant/ dist/
-          cp -r .venv/lib/python3.12/site-packages/* dist/
-          find dist/ -type f -print0 | xargs -0 chmod 755
-          cd dist/
-          zip -q -r ~/dist.zip ./*
+          $accountId = aws sts get-caller-identity --query Account --output text
+          docker build --platform linux/amd64 -t scant:latest .
+          docker tag scant:latest $accountId.dkr.ecr.us-east-1.amazonaws.com/scant/scanner:latest
+          docker push $accountId.dkr.ecr.us-east-1.amazonaws.com/scant/scanner:latest
+          "tag=$accountId.dkr.ecr.us-east-1.amazonaws.com/scant/scanner:latest" >> $Env:GITHUB_OUTPUT
       - name: Deploy
         working-directory: infrastructure
         run: |
           terraform init -backend-config="bucket=${{ secrets.TF_BUCKET }}"
-          terraform apply -auto-approve -var "lambda_zip_file=~/dist.zip"
+          terraform apply -auto-approve
+          aws lambda update-function-code --function-name scant-scanner --image-uri ${{ steps.build.outputs.tag }}
