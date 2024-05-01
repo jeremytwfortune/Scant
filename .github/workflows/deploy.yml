@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
           python-version: "3.12"
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@97f030cf6dc0b4f5e0da352c7bca9cca34579800 # v3.1.0
       - name: Install Package Manager
         run: curl -sSL https://install.python-poetry.org | python3 -
       - name: Install Dependencies
@@ -42,7 +42,6 @@ jobs:
           mkdir -p publish
           cp -r scant/ dist/
           cp -r .venv/lib/python3.12/site-packages/* dist/
-          cp -r .venv/lib/site-packages/* dist/
           find dist/ -type f -print0 | xargs -0 chmod 755
           cd dist/
           zip -q -r ~/dist.zip ./*
