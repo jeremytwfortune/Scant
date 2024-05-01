@@ -33,9 +33,9 @@ jobs:
         shell: pwsh
         run: |
           $accountId = aws sts get-caller-identity --query Account --output text
-          docker build --platform linux/amd64 -t scant:latest .
-          docker tag scant:latest $accountId.dkr.ecr.us-east-1.amazonaws.com/scant/scanner:latest
-          docker push $accountId.dkr.ecr.us-east-1.amazonaws.com/scant/scanner:latest
+          docker build --platform linux/amd64 -t "scant:latest" .
+          docker tag "scant:latest" "$accountId.dkr.ecr.us-east-1.amazonaws.com/scant/scanner:latest"
+          docker push "$accountId.dkr.ecr.us-east-1.amazonaws.com/scant/scanner:latest"
           "tag=$accountId.dkr.ecr.us-east-1.amazonaws.com/scant/scanner:latest" >> $Env:GITHUB_OUTPUT
       - name: Deploy
         working-directory: infrastructure
