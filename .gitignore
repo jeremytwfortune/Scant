@@ -11,3 +11,4 @@ pack
 publish
 **/.mypy_cache
 .venv
+**/__pycache__/

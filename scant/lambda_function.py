@@ -40,7 +40,8 @@ def lambda_handler(event, context) -> Any:
             return {"statusCode": 200, "body": f"Found {len(new_job_listings)} new job listings"}
 
         except Exception as error:
-            infrastructure.slack.send_failure()
+            print(f"Failed to scrape job listings: {error}")
+            # infrastructure.slack.send_failure()
             raise error
 
         finally:

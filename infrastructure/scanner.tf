@@ -21,6 +21,11 @@ resource "aws_lambda_function" "scanner" {
   }
 }
 
+resource "aws_lambda_function_event_invoke_config" "scanner" {
+  function_name          = aws_lambda_function.scanner.function_name
+  maximum_retry_attempts = 0
+}
+
 resource "aws_scheduler_schedule" "scanner" {
   name                = "scant-scanner"
   schedule_expression = "rate(3 minutes)"
@@ -28,6 +33,11 @@ resource "aws_scheduler_schedule" "scanner" {
   target {
     arn      = aws_lambda_function.scanner.arn
     role_arn = aws_iam_role.scheduler.arn
+
+    retry_policy {
+      maximum_event_age_in_seconds = 60
+      maximum_retry_attempts       = 1
+    }
   }
 
   flexible_time_window {
