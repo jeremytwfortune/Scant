@@ -20,6 +20,9 @@ resource "aws_lambda_function" "scanner" {
       SCANT_LAMBDA_FUNCTION_NAME = "scant-scanner"
     }
   }
+  ephemeral_storage {
+    size = 4 * 1024
+  }
 }
 
 resource "aws_lambda_function_event_invoke_config" "scanner" {
@@ -28,8 +31,7 @@ resource "aws_lambda_function_event_invoke_config" "scanner" {
 }
 
 resource "aws_scheduler_schedule" "scanner" {
-  name = "scant-scanner"
-  // Every 3 minutes between 6a and 11p Eastern
+  name                = "scant-scanner"
   schedule_expression = "cron(0/3 10-3 ? * ? *)"
 
   target {
