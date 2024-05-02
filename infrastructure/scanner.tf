@@ -32,7 +32,7 @@ resource "aws_lambda_function_event_invoke_config" "scanner" {
 
 resource "aws_scheduler_schedule" "scanner" {
   name                = "scant-scanner"
-  schedule_expression = "cron(0/3 10-3 ? * ? *)"
+  schedule_expression = "cron(0/3 10-3 ? * * *)"
 
   target {
     arn      = aws_lambda_function.scanner.arn
