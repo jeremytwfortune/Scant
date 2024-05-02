@@ -31,4 +31,6 @@ class SelfInspector:
         now = datetime.now(timezone.utc)
         errors = self.__get_metric("Errors", now)
         invocations = self.__get_metric("Invocations", now)
-        return invocations > 0 and errors < invocations
+        if invocations == 0:
+            return True
+        return errors < invocations

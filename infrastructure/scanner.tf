@@ -28,8 +28,9 @@ resource "aws_lambda_function_event_invoke_config" "scanner" {
 }
 
 resource "aws_scheduler_schedule" "scanner" {
-  name                = "scant-scanner"
-  schedule_expression = "rate(3 minutes)"
+  name = "scant-scanner"
+  // Every 3 minutes between 6a and 11p Eastern
+  schedule_expression = "cron(0/3 10-3 ? * ? *)"
 
   target {
     arn      = aws_lambda_function.scanner.arn
