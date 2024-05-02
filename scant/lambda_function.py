@@ -4,6 +4,7 @@ from playwright.sync_api import sync_playwright
 
 from scant.infrastructure import get_infrastructure
 from scant.scanner import Scanner
+from scant.self_inspector import SelfInspector
 from scant.watermark import Watermark, Watermarker
 
 
@@ -14,6 +15,7 @@ def lambda_handler(event, context) -> Any:
 
         scanner = Scanner(page)
         watermarker = Watermarker(os.environ.get("SCANT_WATERMARK_NAME"))
+        self_inspector = SelfInspector(os.environ["SCANT_LAMBDA_FUNCTION_NAME"])
 
         infrastructure = get_infrastructure(os.environ.get("SCANT_AUTHENTICATION_NAME"), watermarker)
 
@@ -41,7 +43,8 @@ def lambda_handler(event, context) -> Any:
 
         except Exception as error:
             print(f"Failed to scrape job listings: {error}")
-            # infrastructure.slack.send_failure()
+            if not self_inspector.recently_successful():
+                infrastructure.slack.send_failure()
             raise error
 
         finally:

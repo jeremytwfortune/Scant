@@ -15,8 +15,9 @@ resource "aws_lambda_function" "scanner" {
   }
   environment {
     variables = {
-      SCANT_WATERMARK_NAME      = aws_ssm_parameter.watermark.name
-      SCANT_AUTHENTICATION_NAME = aws_secretsmanager_secret.authentication.name
+      SCANT_WATERMARK_NAME       = aws_ssm_parameter.watermark.name
+      SCANT_AUTHENTICATION_NAME  = aws_secretsmanager_secret.authentication.name
+      SCANT_LAMBDA_FUNCTION_NAME = "scant-scanner"
     }
   }
 }

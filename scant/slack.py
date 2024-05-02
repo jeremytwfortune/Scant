@@ -27,6 +27,6 @@ class SlackNotifier:
         requests.post(self.__webhook, json=payload)
 
     def send_failure(self) -> None:
-        payload = {"text": "Failed to scrape job listings", "channel": "@UQCU37H8F"}
+        payload = {"text": "It has been a while since I scraped listings correctly."}
 
         requests.post(self.__webhook, json=payload)
