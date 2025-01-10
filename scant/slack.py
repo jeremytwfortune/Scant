@@ -11,7 +11,7 @@ def format_job_listing_as_attachment(job_listing: JobListing) -> dict[str, Any]:
         "title": job_listing.title,
         "title_link": url,
         "fields": [
-            {"title": "Posted On", "value": job_listing.posted_on, "short": True},
+            {"title": "Job Type", "value": job_listing.job_type, "short": True},
             {"title": "Dates", "value": job_listing.dates, "short": True},
         ],
     }

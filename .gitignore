@@ -12,3 +12,4 @@ publish
 **/.mypy_cache
 .venv
 **/__pycache__/
+.local-scripts/

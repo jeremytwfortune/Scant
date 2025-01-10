@@ -37,17 +37,21 @@ class Scanner:
         rows = self.__page.locator("tbody").locator("tr")
 
         for row in rows.all():
-            columns = row.locator("td")
-            job_id, posted_on, title, dates, *_ = columns.all()
+            columns = row.locator("td").all()
+            column_count = len(columns)
+            if column_count < 5:
+                continue
+
+            job_id, job_type, dates, title, *_ = columns
             try:
                 numeric_job_id = int(job_id.inner_text())
             except ValueError:
-                print(f"Skipping row with invalid job ID: {job_id.inner_text()}")
+                print(f"Skipping row with invalid job ID")
                 continue
 
             job_listing = JobListing(
                 job_id=numeric_job_id,
-                posted_on=posted_on.inner_text(),
+                job_type=job_type.inner_text(),
                 title=title.inner_text(),
                 dates=dates.inner_text(),
             )

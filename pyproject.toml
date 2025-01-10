@@ -17,6 +17,7 @@ ipykernel = "^6.29.4"
 mypy = "^1.10.0"
 types-boto3 = "^1.0.2"
 types-requests = "^2.31.0.20240406"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.deploy.dependencies]
 awslambdaric = "^2.0.11"
