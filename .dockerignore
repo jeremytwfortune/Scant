@@ -6,3 +6,6 @@ dist
 **/.terraform
 infrastructure
 .local-scripts
+.venv
+.git
+**/__pycache__

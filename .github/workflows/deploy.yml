@@ -7,18 +7,9 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    env:
-      POETRY_VIRTUALENVS_IN_PROJECT: true
-      POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY: true
-      POETRY_CACHE_DIR: "~/.poetry-cache"
     steps:
       - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
-      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
-        with:
-          python-version: "3.12"
       - uses: hashicorp/setup-terraform@97f030cf6dc0b4f5e0da352c7bca9cca34579800 # v3.1.0
-      - name: Install Package Manager
-        run: curl -sSL https://install.python-poetry.org | python3 -
       - name: Set Credentials
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
         with:
