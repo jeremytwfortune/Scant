@@ -6,7 +6,7 @@ param(
 
 Connect-ECRRepository
 
-docker build -t scant .
+docker build --platform linux/arm64 --provenance=false -t scant .
 docker tag scant:latest ${RepositoryUri}:latest
 docker push ${RepositoryUri}:latest
 

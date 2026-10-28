@@ -10,6 +10,7 @@ resource "aws_lambda_function" "scanner" {
   role          = aws_iam_role.scanner.arn
   image_uri     = "${aws_ecr_repository.scanner.repository_url}:latest"
   package_type  = "Image"
+  architectures = ["arm64"]
   image_config {
     command = ["scant.lambda_function.lambda_handler"]
   }
