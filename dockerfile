@@ -1,4 +1,4 @@
-FROM python:3.12.14-bookworm@sha256:dbbe4ceb97851e2e5fa83798b239811f871cb743b259ba3563737349f6bcfaa0
+FROM python:3.14.10-bookworm@sha256:d6bb57cfadfb8917f28e7e6f21640f4943a681edf79fb5ca5b1abccb60c45787
 
 WORKDIR "/var/task"
 

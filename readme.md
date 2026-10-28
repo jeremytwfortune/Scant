@@ -2,10 +2,10 @@
 
 Scans for new contracted job listings and posts to our family's Slack.
 
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then set up Python 3.12 and the development dependencies:
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then set up Python 3.14 and the development dependencies:
 
 ```text
-uv sync --locked --python 3.12
+uv sync --locked --python 3.14
 uv run playwright install chromium
 ```
 
