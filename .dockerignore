@@ -9,3 +9,6 @@ infrastructure
 .venv
 .git
 **/__pycache__
+tests
+.pytest_cache
+.coverage

@@ -11,3 +11,6 @@ uv run playwright install chromium
 
 Run development tools with `uv run`, for example `uv run black --check .`.
 The Docker build installs the locked dependencies, including the `deploy` group, and Chromium.
+
+Run the unit tests and view coverage with `uv run pytest tests --cov=scant --cov-report=term-missing`.
+The deployment workflow runs this suite before configuring AWS credentials, building the image, or deploying.

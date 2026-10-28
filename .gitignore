@@ -13,3 +13,5 @@ publish
 .venv
 **/__pycache__/
 .local-scripts/
+.pytest_cache/
+.coverage
